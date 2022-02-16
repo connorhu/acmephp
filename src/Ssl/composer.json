@@ -38,8 +38,7 @@
         "php": ">=7.2.5",
         "ext-hash": "*",
         "ext-openssl": "*",
-        "lib-openssl": ">=0.9.8",
-        "webmozart/assert": "^1.0"
+        "lib-openssl": ">=0.9.8"
     },
     "config": {
         "sort-packages": true
