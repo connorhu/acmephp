@@ -12,7 +12,6 @@
 namespace AcmePhp\Ssl;
 
 use AcmePhp\Ssl\Exception\KeyFormatException;
-use Webmozart\Assert\Assert;
 
 /**
  * Represent a SSL Private key.
@@ -50,7 +49,9 @@ class PrivateKey extends Key
 
     public static function fromDER(string $keyDER): self
     {
-        Assert::stringNotEmpty($keyDER, __METHOD__.'::$keyDER should be a non-empty string. Got %s');
+        if (empty($keyDER)) {
+            throw new \InvalidArgumentException(sprintf('%s::$keyDER should be a non-empty string. Got "%s"', __METHOD__, $keyDER));
+        }
 
         $der = base64_encode($keyDER);
         $lines = str_split($der, 65);
