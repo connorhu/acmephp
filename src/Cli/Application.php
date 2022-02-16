@@ -17,7 +17,7 @@ use AcmePhp\Cli\Command\RunCommand;
 use AcmePhp\Cli\Command\SelfUpdateCommand;
 use AcmePhp\Cli\Command\StatusCommand;
 use Symfony\Component\Console\Application as BaseApplication;
-use Webmozart\PathUtil\Path;
+use Symfony\Component\Filesystem\Path;
 
 /**
  * @author Titouan Galopin <galopintitouan@gmail.com>
@@ -65,7 +65,7 @@ class Application extends BaseApplication
     /**
      * @return string
      */
-    public function getStorageDirectory()
+    public function getStorageDirectory(): string
     {
         return Path::canonicalize('~/.acmephp/master');
     }
