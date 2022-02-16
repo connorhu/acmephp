@@ -38,8 +38,13 @@ class KeyPairGeneratorTest extends TestCase
         $this->assertInstanceOf(KeyPair::class, $result);
         $this->assertStringContainsString('-----BEGIN PUBLIC KEY-----', $result->getPublicKey()->getPEM());
         $this->assertStringContainsString('-----BEGIN PRIVATE KEY-----', $result->getPrivateKey()->getPEM());
-        $this->assertIsResource($result->getPublicKey()->getResource());
-        $this->assertIsResource($result->getPrivateKey()->getResource());
+        if (PHP_VERSION_ID >= 80000) {
+            $this->assertInstanceOf(\OpenSSLAsymmetricKey::class, $result->getPublicKey()->getAsymmetricKey());
+            $this->assertInstanceOf(\OpenSSLAsymmetricKey::class, $result->getPrivateKey()->getAsymmetricKey());
+        } else {
+            $this->assertIsResource($result->getPublicKey()->getResource());
+            $this->assertIsResource($result->getPrivateKey()->getResource());
+        }
 
         $details = openssl_pkey_get_details($result->getPrivateKey()->getResource());
         $this->assertEquals(1024, $details['bits']);
@@ -56,8 +61,13 @@ class KeyPairGeneratorTest extends TestCase
         $this->assertInstanceOf(KeyPair::class, $result);
         $this->assertStringContainsString('-----BEGIN PUBLIC KEY-----', $result->getPublicKey()->getPEM());
         $this->assertStringContainsString('-----BEGIN PRIVATE KEY-----', $result->getPrivateKey()->getPEM());
-        $this->assertIsResource($result->getPublicKey()->getResource());
-        $this->assertIsResource($result->getPrivateKey()->getResource());
+        if (PHP_VERSION_ID >= 80000) {
+            $this->assertInstanceOf(\OpenSSLAsymmetricKey::class, $result->getPublicKey()->getAsymmetricKey());
+            $this->assertInstanceOf(\OpenSSLAsymmetricKey::class, $result->getPrivateKey()->getAsymmetricKey());
+        } else {
+            $this->assertIsResource($result->getPublicKey()->getResource());
+            $this->assertIsResource($result->getPrivateKey()->getResource());
+        }
 
         $details = openssl_pkey_get_details($result->getPrivateKey()->getResource());
         $this->assertArrayHasKey('dh', $details);
@@ -70,8 +80,13 @@ class KeyPairGeneratorTest extends TestCase
         $this->assertInstanceOf(KeyPair::class, $result);
         $this->assertStringContainsString('-----BEGIN PUBLIC KEY-----', $result->getPublicKey()->getPEM());
         $this->assertStringContainsString('-----BEGIN PRIVATE KEY-----', $result->getPrivateKey()->getPEM());
-        $this->assertIsResource($result->getPublicKey()->getResource());
-        $this->assertIsResource($result->getPrivateKey()->getResource());
+        if (PHP_VERSION_ID >= 80000) {
+            $this->assertInstanceOf(\OpenSSLAsymmetricKey::class, $result->getPublicKey()->getAsymmetricKey());
+            $this->assertInstanceOf(\OpenSSLAsymmetricKey::class, $result->getPrivateKey()->getAsymmetricKey());
+        } else {
+            $this->assertIsResource($result->getPublicKey()->getResource());
+            $this->assertIsResource($result->getPrivateKey()->getResource());
+        }
 
         $details = openssl_pkey_get_details($result->getPrivateKey()->getResource());
         $this->assertEquals(1024, $details['bits']);
@@ -88,8 +103,13 @@ class KeyPairGeneratorTest extends TestCase
         $this->assertInstanceOf(KeyPair::class, $result);
         $this->assertStringContainsString('-----BEGIN PUBLIC KEY-----', $result->getPublicKey()->getPEM());
         $this->assertStringContainsString('-----BEGIN EC PRIVATE KEY-----', $result->getPrivateKey()->getPEM());
-        $this->assertIsResource($result->getPublicKey()->getResource());
-        $this->assertIsResource($result->getPrivateKey()->getResource());
+        if (PHP_VERSION_ID >= 80000) {
+            $this->assertInstanceOf(\OpenSSLAsymmetricKey::class, $result->getPublicKey()->getAsymmetricKey());
+            $this->assertInstanceOf(\OpenSSLAsymmetricKey::class, $result->getPrivateKey()->getAsymmetricKey());
+        } else {
+            $this->assertIsResource($result->getPublicKey()->getResource());
+            $this->assertIsResource($result->getPrivateKey()->getResource());
+        }
 
         $details = openssl_pkey_get_details($result->getPrivateKey()->getResource());
         $this->assertEquals(112, $details['bits']);

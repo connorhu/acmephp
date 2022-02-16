@@ -63,15 +63,37 @@ class Certificate
     }
 
     /**
+     * @deprecated
      * @return resource
      */
     public function getPublicKeyResource()
+    {
+        return $this->doGetPublicKey();
+    }
+
+    private function doGetPublicKey()
     {
         if (!$resource = openssl_pkey_get_public($this->certificatePEM)) {
             throw new CertificateFormatException(sprintf('Failed to convert certificate into public key resource: %s', openssl_error_string()));
         }
 
         return $resource;
+    }
+
+    /**
+     * @return \OpenSSLAsymmetricKey
+     */
+    public function getAsymmetricPublicKey(): \OpenSSLAsymmetricKey
+    {
+        if (PHP_VERSION_ID < 80000) {
+            throw new \BadMethodCallException('This method available only over php version 8.0');
+        }
+
+        /** @var \OpenSSLAsymmetricKey $publicKey */
+        /** @noinspection PhpUnnecessaryLocalVariableInspection */
+        $publicKey = $this->doGetPublicKey();
+
+        return $publicKey;
     }
 
     public function getPublicKey(): PublicKey

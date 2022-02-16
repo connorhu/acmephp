@@ -20,16 +20,33 @@ use AcmePhp\Ssl\Exception\KeyFormatException;
  */
 class PrivateKey extends Key
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getResource()
+    private function doGetKey()
     {
         if (!$resource = openssl_pkey_get_private($this->keyPEM)) {
             throw new KeyFormatException(sprintf('Failed to convert key into resource: %s', openssl_error_string()));
         }
 
         return $resource;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getResource()
+    {
+        return $this->doGetKey();
+    }
+
+    /**
+     *  {@inheritdoc}
+     */
+    public function getAsymmetricKey(): \OpenSSLAsymmetricKey
+    {
+        /** @var \OpenSSLAsymmetricKey $publicKey */
+        /** @noinspection PhpUnnecessaryLocalVariableInspection */
+        $publicKey = $this->doGetKey();
+
+        return $publicKey;
     }
 
     public function getPublicKey(): PublicKey

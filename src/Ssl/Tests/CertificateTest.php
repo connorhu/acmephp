@@ -102,6 +102,10 @@ oVyIb1lpwK0r0vN9y8ns80MP3HtjPYtARWJ9z9P4N+guHZdnbw==
 
         $resource = $certificate->getPublicKeyResource();
 
-        $this->assertIsResource($resource);
+        if (PHP_VERSION_ID > 80000) {
+            $this->assertInstanceOf(\OpenSSLAsymmetricKey::class, $resource);
+        } else {
+            $this->assertIsResource($resource);
+        }
     }
 }

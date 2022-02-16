@@ -46,7 +46,13 @@ abstract class Key
     }
 
     /**
+     * @deprecated 
      * @return resource
      */
     abstract public function getResource();
+
+    /**
+     * @return \OpenSSLAsymmetricKey
+     */
+    abstract public function getAsymmetricKey(): \OpenSSLAsymmetricKey;
 }
