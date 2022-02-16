@@ -11,8 +11,6 @@
 
 namespace AcmePhp\Cli\Action;
 
-use Webmozart\Assert\Assert;
-
 /**
  * @author Titouan Galopin <galopintitouan@gmail.com>
  */
@@ -21,11 +19,9 @@ abstract class AbstractAction implements ActionInterface
     protected function assertConfiguration(array $configuration, array $keys)
     {
         foreach ($keys as $key) {
-            Assert::keyExists(
-                $configuration,
-                $key,
-                'Configuration key "%s" is required for this action'
-            );
+            if (!isset($configuration)) {
+                throw new \InvalidArgumentException(sprintf('Configuration key "%s" is required for this action', $key));
+            }
         }
     }
 }

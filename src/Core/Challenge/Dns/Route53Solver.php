@@ -17,7 +17,6 @@ use AcmePhp\Core\Protocol\AuthorizationChallenge;
 use Aws\Route53\Route53Client;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
-use Webmozart\Assert\Assert;
 
 /**
  * ACME DNS solver with automate configuration of a AWS route53.
