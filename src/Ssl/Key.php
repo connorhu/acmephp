@@ -41,9 +41,8 @@ abstract class Key
         unset($lines[\count($lines) - 1]);
         unset($lines[0]);
         $result = implode('', $lines);
-        $result = base64_decode($result);
 
-        return $result;
+        return base64_decode($result);
     }
 
     /**
