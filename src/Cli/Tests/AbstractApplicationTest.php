@@ -11,11 +11,11 @@
 
 namespace Tests\AcmePhp\Cli;
 
+use AcmePhp\Core\Tests\AbstractFunctionnalTest;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Tests\AcmePhp\Cli\Mock\TestApplication;
-use Tests\AcmePhp\Core\AbstractFunctionnalTest;
 
 abstract class AbstractApplicationTest extends AbstractFunctionnalTest
 {

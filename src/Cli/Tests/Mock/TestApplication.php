@@ -11,14 +11,14 @@
 
 namespace Tests\AcmePhp\Cli\Mock;
 
-use Webmozart\PathUtil\Path;
+use Symfony\Component\Filesystem\Path;
 
 class TestApplication extends \AcmePhp\Cli\Application
 {
     /**
      * @return string
      */
-    public function getStorageDirectory()
+    public function getStorageDirectory(): string
     {
         return Path::canonicalize(__DIR__.'/../Fixtures/local/master');
     }
