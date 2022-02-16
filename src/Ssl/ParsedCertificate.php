@@ -64,11 +64,16 @@ class ParsedCertificate
         string $serialNumber = null,
         array $subjectAlternativeNames = []
     ) {
-        Assert::stringNotEmpty($subject, __CLASS__.'::$subject expected a non empty string. Got: %s');
-        Assert::allStringNotEmpty(
-            $subjectAlternativeNames,
-            __CLASS__.'::$subjectAlternativeNames expected a array of non empty string. Got: %s'
-        );
+        if (empty($subject)) {
+            throw new \InvalidArgumentException(sprintf('%s::$subject expected a non empty string. Got: "%s"', __CLASS__, $subject));
+        }
+
+        foreach ($subjectAlternativeNames as $subjectAlternativeName) {
+            if (empty($subjectAlternativeName)) {
+                $message = sprintf('%s::$subjectAlternativeNames expected a array of non empty string. Got: "%s"', __CLASS__, implode(', ', $subjectAlternativeName));
+                throw new \InvalidArgumentException($message);
+            }
+        }
 
         $this->source = $source;
         $this->subject = $subject;
