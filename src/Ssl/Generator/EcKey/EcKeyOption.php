@@ -12,7 +12,6 @@
 namespace AcmePhp\Ssl\Generator\EcKey;
 
 use AcmePhp\Ssl\Generator\KeyOption;
-use Webmozart\Assert\Assert;
 
 class EcKeyOption implements KeyOption
 {
@@ -21,7 +20,10 @@ class EcKeyOption implements KeyOption
 
     public function __construct(string $curveName = 'secp384r1')
     {
-        Assert::oneOf($curveName, openssl_get_curve_names(), 'The given curve %s is not supported. Available curves are: %s');
+        if (!\in_array($curveName, $curveNames = openssl_get_curve_names())) {
+            $message = sprintf('The given curve "%s" is not supported. Available curves are: "%s"', $curveName, implode(', ', $curveNames));
+            throw new \InvalidArgumentException($message);
+        }
 
         $this->curveName = $curveName;
     }
