@@ -11,8 +11,6 @@
 
 namespace AcmePhp\Ssl;
 
-use Webmozart\Assert\Assert;
-
 /**
  * Represent the content of a parsed key.
  *
@@ -34,17 +32,21 @@ class ParsedKey
     /** @var int */
     private $type;
 
+    private const VALID_TYPES = [OPENSSL_KEYTYPE_RSA, OPENSSL_KEYTYPE_DSA, OPENSSL_KEYTYPE_DH, OPENSSL_KEYTYPE_EC];
+
     /** @var array */
     private $details;
 
     public function __construct(Key $source, string $key, int $bits, int $type, array $details = [])
     {
-        Assert::stringNotEmpty($key, __CLASS__.'::$key expected a non empty string. Got: %s');
-        Assert::oneOf(
-            $type,
-            [OPENSSL_KEYTYPE_RSA, OPENSSL_KEYTYPE_DSA, OPENSSL_KEYTYPE_DH, OPENSSL_KEYTYPE_EC],
-            __CLASS__.'::$type expected one of: %2$s. Got: %s'
-        );
+        if (empty($key)) {
+            throw new \InvalidArgumentException(sprintf('%s::$key expected a non empty string. Got: "%s"', __CLASS__, $key));
+        }
+
+        if (!\in_array($type, self::VALID_TYPES)) {
+            $message = sprintf('%s::$type expected one of: %s. Got: "%s"', __CLASS__, implode(', ', self::VALID_TYPES), $type);
+            throw new \InvalidArgumentException($message);
+        }
 
         $this->source = $source;
         $this->key = $key;
@@ -85,7 +87,10 @@ class ParsedKey
 
     public function getDetail(string $name)
     {
-        Assert::oneOf($name, array_keys($this->details), 'ParsedKey::getDetail() expected one of: %2$s. Got: %s');
+        if (!isset($this->details[$name])) {
+            $message = sprintf('ParsedKey::getDetail() expected one of: "%s". Got: "%s"', implode(', ', array_keys($this->details)), $name);
+            throw new \InvalidArgumentException($message);
+        }
 
         return $this->details[$name];
     }
