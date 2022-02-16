@@ -29,7 +29,9 @@ class Certificate
 
     public function __construct(string $certificatePEM, self $issuerCertificate = null)
     {
-        Assert::stringNotEmpty($certificatePEM, __CLASS__.'::$certificatePEM should not be an empty string. Got %s');
+        if (empty($certificatePEM)) {
+            throw new \InvalidArgumentException(sprintf('%s::$certificatePEM expected a non empty string. Got: "%s"', __CLASS__, $certificatePEM));
+        }
 
         $this->certificatePEM = $certificatePEM;
         $this->issuerCertificate = $issuerCertificate;
