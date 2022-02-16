@@ -27,7 +27,7 @@ class RsaKeyGenerator implements PrivateKeyGeneratorInterface
 
     public function generatePrivateKey(KeyOption $keyOption): PrivateKey
     {
-        if ($keyOption instanceof RsaKeyOption) {
+        if (!$keyOption instanceof RsaKeyOption) {
             $message = sprintf('%s::$keyOption expected an instance of %s. Got: %s', __METHOD__, RsaKeyOption::class, \get_class($keyOption));
             throw new \InvalidArgumentException($message);
         }

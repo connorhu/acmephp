@@ -27,7 +27,7 @@ class DhKeyGenerator implements PrivateKeyGeneratorInterface
 
     public function generatePrivateKey(KeyOption $keyOption): PrivateKey
     {
-        if ($keyOption instanceof DhKeyOption) {
+        if (!$keyOption instanceof DhKeyOption) {
             $message = sprintf('%s::$keyOption expected an instance of %s. Got: %s', __METHOD__, DhKeyOption::class, \get_class($keyOption));
             throw new \InvalidArgumentException($message);
         }

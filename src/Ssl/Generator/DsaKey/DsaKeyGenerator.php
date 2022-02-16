@@ -27,7 +27,7 @@ class DsaKeyGenerator implements PrivateKeyGeneratorInterface
 
     public function generatePrivateKey(KeyOption $keyOption): PrivateKey
     {
-        if ($keyOption instanceof DsaKeyOption) {
+        if (!$keyOption instanceof DsaKeyOption) {
             $message = sprintf('%s::$keyOption expected an instance of %s. Got: %s', __METHOD__, DsaKeyOption::class, \get_class($keyOption));
             throw new \InvalidArgumentException($message);
         }
