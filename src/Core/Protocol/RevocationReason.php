@@ -11,8 +11,6 @@
 
 namespace AcmePhp\Core\Protocol;
 
-use Webmozart\Assert\Assert;
-
 /**
  * @url https://github.com/certbot/certbot/blob/c326c021082dede7c3b2bd411cec3aec6dff0ac5/certbot/constants.py#L124
  */
@@ -30,7 +28,10 @@ class RevocationReason
 
     public function __construct(int $reasonType)
     {
-        Assert::oneOf($reasonType, self::getReasons(), 'Revocation reason type "%s" is not supported by the ACME server (supported: %2$s)');
+        if (!in_array($reasonType, self::getReasons())) {
+            $message = sprintf('Revocation reason type "%d" is not supported by the ACME server (supported: %s)', $reasonType, implode(', ', self::getReasons()));
+            throw new \InvalidArgumentException($message);
+        }
 
         $this->reasonType = $reasonType;
     }

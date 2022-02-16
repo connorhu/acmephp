@@ -63,7 +63,7 @@ class Route53Solver implements MultipleChallengesSolverInterface
      */
     public function solve(AuthorizationChallenge $authorizationChallenge)
     {
-        return $this->solveAll([$authorizationChallenge]);
+        $this->solveAll([$authorizationChallenge]);
     }
 
     /**
@@ -71,7 +71,11 @@ class Route53Solver implements MultipleChallengesSolverInterface
      */
     public function solveAll(array $authorizationChallenges)
     {
-        Assert::allIsInstanceOf($authorizationChallenges, AuthorizationChallenge::class);
+        foreach ($authorizationChallenges as $authorizationChallenge) {
+            if (!$authorizationChallenge instanceof AuthorizationChallenge::class) {
+                throw new \InvalidArgumentException('solveAll::$authorizationChallenges should array of "%s"', AuthorizationChallenge::class);
+            }
+        }
 
         $changesPerZone = [];
         $authorizationChallengesPerDomain = $this->groupAuthorizationChallengesPerDomain($authorizationChallenges);
@@ -119,7 +123,7 @@ class Route53Solver implements MultipleChallengesSolverInterface
      */
     public function cleanup(AuthorizationChallenge $authorizationChallenge)
     {
-        return $this->cleanupAll([$authorizationChallenge]);
+        $this->cleanupAll([$authorizationChallenge]);
     }
 
     /**
@@ -127,7 +131,11 @@ class Route53Solver implements MultipleChallengesSolverInterface
      */
     public function cleanupAll(array $authorizationChallenges)
     {
-        Assert::allIsInstanceOf($authorizationChallenges, AuthorizationChallenge::class);
+        foreach ($authorizationChallenges as $authorizationChallenge) {
+            if (!$authorizationChallenge instanceof AuthorizationChallenge::class) {
+                throw new \InvalidArgumentException('cleanupAll::$authorizationChallenges should array of "%s"', AuthorizationChallenge::class);
+            }
+        }
 
         $changesPerZone = [];
         $authorizationChallengesPerDomain = $this->groupAuthorizationChallengesPerDomain($authorizationChallenges);

@@ -11,8 +11,6 @@
 
 namespace AcmePhp\Core\Protocol;
 
-use Webmozart\Assert\Assert;
-
 /**
  * Represent a ACME resources directory.
  *
@@ -51,11 +49,10 @@ class ResourcesDirectory
      */
     public function getResourceUrl(string $resource): string
     {
-        Assert::oneOf(
-            $resource,
-            array_keys($this->serverResources),
-            'Resource type "%s" is not supported by the ACME server (supported: %2$s)'
-        );
+        if (!isset($this->serverResources[$resource])) {
+            $message = sprintf('Resource type "%s" is not supported by the ACME server (supported: "%s")', $resource, implode(', ', $this->serverResources));
+            throw new \InvalidArgumentException($message);
+        }
 
         return $this->serverResources[$resource];
     }

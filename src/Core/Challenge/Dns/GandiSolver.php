@@ -18,7 +18,6 @@ use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
-use Webmozart\Assert\Assert;
 
 /**
  * ACME DNS solver with automate configuration of a Gandi.Net.
@@ -77,15 +76,19 @@ class GandiSolver implements MultipleChallengesSolverInterface, ConfigurableServ
      */
     public function solve(AuthorizationChallenge $authorizationChallenge)
     {
-        return $this->solveAll([$authorizationChallenge]);
+        $this->solveAll([$authorizationChallenge]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function solveAll(array $authorizationChallenges)
+    public function solveAll(array $authorizationChallenges): void
     {
-        Assert::allIsInstanceOf($authorizationChallenges, AuthorizationChallenge::class);
+        foreach ($authorizationChallenges as $authorizationChallenge) {
+            if (!$authorizationChallenge instanceof AuthorizationChallenge::class) {
+                throw new \InvalidArgumentException('solveAll::$authorizationChallenges should array of "%s"', AuthorizationChallenge::class);
+            }
+        }
 
         foreach ($authorizationChallenges as $authorizationChallenge) {
             $topLevelDomain = $this->getTopLevelDomain($authorizationChallenge->getDomain());
@@ -117,7 +120,7 @@ class GandiSolver implements MultipleChallengesSolverInterface, ConfigurableServ
      */
     public function cleanup(AuthorizationChallenge $authorizationChallenge)
     {
-        return $this->cleanupAll([$authorizationChallenge]);
+        $this->cleanupAll([$authorizationChallenge]);
     }
 
     /**
@@ -125,7 +128,11 @@ class GandiSolver implements MultipleChallengesSolverInterface, ConfigurableServ
      */
     public function cleanupAll(array $authorizationChallenges)
     {
-        Assert::allIsInstanceOf($authorizationChallenges, AuthorizationChallenge::class);
+        foreach ($authorizationChallenges as $authorizationChallenge) {
+            if (!$authorizationChallenge instanceof AuthorizationChallenge::class) {
+                throw new \InvalidArgumentException('cleanupAll::$authorizationChallenges should array of "%s"', AuthorizationChallenge::class);
+            }
+        }
 
         foreach ($authorizationChallenges as $authorizationChallenge) {
             $topLevelDomain = $this->getTopLevelDomain($authorizationChallenge->getDomain());

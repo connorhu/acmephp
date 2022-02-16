@@ -19,7 +19,6 @@ use AcmePhp\Core\Filesystem\FilesystemInterface;
 use AcmePhp\Core\Protocol\AuthorizationChallenge;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\ServiceLocator;
-use Webmozart\Assert\Assert;
 
 /**
  * ACME HTTP solver through ftp upload.
@@ -52,7 +51,9 @@ class FilesystemSolver implements SolverInterface, ConfigurableServiceInterface
 
     public function configure(array $config)
     {
-        Assert::keyExists($config, 'adapter', 'configure::$config expected an array with the key %s.');
+        if (!isset($config['adapter'])) {
+            throw new \InvalidArgumentException('configure::$config expected an array with the key adapter.');
+        }
 
         /** @var FilesystemFactoryInterface $factory */
         $factory = $this->filesystemFactoryLocator->get($config['adapter']);

@@ -29,7 +29,6 @@ use AcmePhp\Ssl\CertificateRequest;
 use AcmePhp\Ssl\CertificateResponse;
 use AcmePhp\Ssl\Signer\CertificateRequestSigner;
 use GuzzleHttp\Psr7\Utils;
-use Webmozart\Assert\Assert;
 
 /**
  * ACME protocol client implementation.
@@ -109,7 +108,12 @@ class AcmeClient implements AcmeClientInterface
      */
     public function requestOrder(array $domains): CertificateOrder
     {
-        Assert::allStringNotEmpty($domains, 'requestOrder::$domains expected a list of strings. Got: %s');
+        foreach ($domains as $domain) {
+            if (empty($domain)) {
+                $message = sprintf('requestOrder::$domains expected a list of strings. Got: %s', implode(', ', $domains));
+                throw new \InvalidArgumentException($message);
+            }
+        }
 
         $payload = [
             'identifiers' => array_map(
