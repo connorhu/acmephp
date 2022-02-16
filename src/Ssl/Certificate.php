@@ -38,7 +38,7 @@ class Certificate
     }
 
     /**
-     * @return Certificate[]
+     * @return array<Certificate>
      */
     public function getIssuerChain(): array
     {
