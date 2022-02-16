@@ -45,10 +45,14 @@ class ParsedCertificate
     private $subjectAlternativeNames;
 
     /**
-     * @param string    $issuer
-     * @param \DateTime $validFrom
-     * @param \DateTime $validTo
-     * @param string    $serialNumber
+     * @param Certificate $source
+     * @param string $subject
+     * @param string|null $issuer
+     * @param bool $selfSigned
+     * @param \DateTime|null $validFrom
+     * @param \DateTime|null $validTo
+     * @param string|null $serialNumber
+     * @param array $subjectAlternativeNames
      */
     public function __construct(
         Certificate $source,
