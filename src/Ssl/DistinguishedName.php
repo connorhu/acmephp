@@ -11,8 +11,6 @@
 
 namespace AcmePhp\Ssl;
 
-use Webmozart\Assert\Assert;
-
 /**
  * Represent a Distinguished Name.
  *
@@ -54,11 +52,16 @@ class DistinguishedName
         string $emailAddress = null,
         array $subjectAlternativeNames = []
     ) {
-        Assert::stringNotEmpty($commonName, __CLASS__.'::$commonName expected a non empty string. Got: %s');
-        Assert::allStringNotEmpty(
-            $subjectAlternativeNames,
-            __CLASS__.'::$subjectAlternativeNames expected an array of non empty string. Got: %s'
-        );
+        if (empty($commonName)) {
+            throw new \InvalidArgumentException(sprintf('%s::$commonName expected a non empty string. Got: "%s"', __CLASS__, $commonName));
+        }
+
+        foreach ($subjectAlternativeNames as $subjectAlternativeName) {
+            if (empty($subjectAlternativeName)) {
+                $message = sprintf('%s::$subjectAlternativeNames expected a array of non empty string. Got: "%s"', __CLASS__, implode(', ', $subjectAlternativeName));
+                throw new \InvalidArgumentException($message);
+            }
+        }
 
         $this->commonName = $commonName;
         $this->countryName = $countryName;
