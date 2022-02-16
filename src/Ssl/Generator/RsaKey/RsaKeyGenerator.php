@@ -15,7 +15,6 @@ use AcmePhp\Ssl\Generator\KeyOption;
 use AcmePhp\Ssl\Generator\OpensslPrivateKeyGeneratorTrait;
 use AcmePhp\Ssl\Generator\PrivateKeyGeneratorInterface;
 use AcmePhp\Ssl\PrivateKey;
-use Webmozart\Assert\Assert;
 
 /**
  * Generate random RSA private key using OpenSSL.
@@ -28,7 +27,10 @@ class RsaKeyGenerator implements PrivateKeyGeneratorInterface
 
     public function generatePrivateKey(KeyOption $keyOption): PrivateKey
     {
-        Assert::isInstanceOf($keyOption, RsaKeyOption::class);
+        if ($keyOption instanceof RsaKeyOption) {
+            $message = sprintf('%s::$keyOption expected an instance of %s. Got: %s', __METHOD__, RsaKeyOption::class, \get_class($keyOption));
+            throw new \InvalidArgumentException($message);
+        }
 
         return $this->generatePrivateKeyFromOpensslOptions([
             'private_key_type' => OPENSSL_KEYTYPE_RSA,

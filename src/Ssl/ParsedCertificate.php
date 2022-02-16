@@ -11,8 +11,6 @@
 
 namespace AcmePhp\Ssl;
 
-use Webmozart\Assert\Assert;
-
 /**
  * Represent the content of a parsed certificate.
  *

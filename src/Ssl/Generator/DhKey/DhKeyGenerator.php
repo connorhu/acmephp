@@ -15,7 +15,6 @@ use AcmePhp\Ssl\Generator\KeyOption;
 use AcmePhp\Ssl\Generator\OpensslPrivateKeyGeneratorTrait;
 use AcmePhp\Ssl\Generator\PrivateKeyGeneratorInterface;
 use AcmePhp\Ssl\PrivateKey;
-use Webmozart\Assert\Assert;
 
 /**
  * Generate random DH private key using OpenSSL.
@@ -28,7 +27,10 @@ class DhKeyGenerator implements PrivateKeyGeneratorInterface
 
     public function generatePrivateKey(KeyOption $keyOption): PrivateKey
     {
-        Assert::isInstanceOf($keyOption, DhKeyOption::class);
+        if ($keyOption instanceof DhKeyOption) {
+            $message = sprintf('%s::$keyOption expected an instance of %s. Got: %s', __METHOD__, DhKeyOption::class, \get_class($keyOption));
+            throw new \InvalidArgumentException($message);
+        }
 
         return $this->generatePrivateKeyFromOpensslOptions([
             'private_key_type' => OPENSSL_KEYTYPE_DH,
