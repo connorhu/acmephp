@@ -11,8 +11,6 @@
 
 namespace AcmePhp\Ssl;
 
-use Webmozart\Assert\Assert;
-
 /**
  * Represent a SSL key.
  *
@@ -25,7 +23,9 @@ abstract class Key
 
     public function __construct(string $keyPEM)
     {
-        Assert::stringNotEmpty($keyPEM, __CLASS__.'::$keyPEM should not be an empty string. Got %s');
+        if (empty($keyPEM)) {
+            throw new \InvalidArgumentException(sprintf('%s::$keyPEM expected a non empty string. Got: "%s"', __CLASS__, $keyPEM));
+        }
 
         $this->keyPEM = $keyPEM;
     }
