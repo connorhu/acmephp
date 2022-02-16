@@ -9,16 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\AcmePhp\Core\Challenge\Dns;
+namespace AcmePhp\Core\Tests\Challenge\Dns;
 
 use AcmePhp\Core\Challenge\Dns\DnsDataExtractor;
-use AcmePhp\Core\Challenge\Dns\SimpleDnsSolver;
+use AcmePhp\Core\Challenge\Dns\DnsResolverInterface;
+use AcmePhp\Core\Challenge\Dns\DnsValidator;
+use AcmePhp\Core\Challenge\SolverInterface;
 use AcmePhp\Core\Protocol\AuthorizationChallenge;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Symfony\Component\Console\Output\OutputInterface;
 
-class SimpleDnsSolverTest extends TestCase
+class DnsValidatorTest extends TestCase
 {
     public function testSupports()
     {
@@ -26,53 +26,50 @@ class SimpleDnsSolverTest extends TestCase
         $typeHttp = 'http-01';
 
         $mockExtractor = $this->prophesize(DnsDataExtractor::class);
-        $mockOutput = $this->prophesize(OutputInterface::class);
         $stubChallenge = $this->prophesize(AuthorizationChallenge::class);
 
-        $solver = new SimpleDnsSolver($mockExtractor->reveal(), $mockOutput->reveal());
+        $validator = new DnsValidator($mockExtractor->reveal());
 
         $stubChallenge->getType()->willReturn($typeDns);
-        $this->assertTrue($solver->supports($stubChallenge->reveal()));
+        $this->assertTrue($validator->supports($stubChallenge->reveal(), $this->prophesize(SolverInterface::class)->reveal()));
 
         $stubChallenge->getType()->willReturn($typeHttp);
-        $this->assertFalse($solver->supports($stubChallenge->reveal()));
+        $this->assertFalse($validator->supports($stubChallenge->reveal(), $this->prophesize(SolverInterface::class)->reveal()));
     }
 
-    public function testSolve()
+    public function testIsValid()
     {
         $recordName = '_acme-challenge.bar.com.';
         $recordValue = 'record_value';
 
+        $mockResolver = $this->prophesize(DnsResolverInterface::class);
+        $mockResolver->getTxtEntries($recordName)->willReturn([$recordValue]);
         $mockExtractor = $this->prophesize(DnsDataExtractor::class);
-        $mockOutput = $this->prophesize(OutputInterface::class);
         $stubChallenge = $this->prophesize(AuthorizationChallenge::class);
 
-        $solver = new SimpleDnsSolver($mockExtractor->reveal(), $mockOutput->reveal());
+        $validator = new DnsValidator($mockExtractor->reveal(), $mockResolver->reveal());
 
         $mockExtractor->getRecordName($stubChallenge->reveal())->willReturn($recordName);
         $mockExtractor->getRecordValue($stubChallenge->reveal())->willReturn($recordValue);
 
-        $mockOutput->writeln(Argument::any())->shouldBeCalled();
-
-        $solver->solve($stubChallenge->reveal());
+        $this->assertTrue($validator->isValid($stubChallenge->reveal(), $this->prophesize(SolverInterface::class)->reveal()));
     }
 
-    public function testCleanup()
+    public function testIsValidCheckRecordValue()
     {
         $recordName = '_acme-challenge.bar.com.';
         $recordValue = 'record_value';
 
+        $mockResolver = $this->prophesize(DnsResolverInterface::class);
+        $mockResolver->getTxtEntries($recordName)->willReturn(['somethingElse']);
         $mockExtractor = $this->prophesize(DnsDataExtractor::class);
-        $mockOutput = $this->prophesize(OutputInterface::class);
         $stubChallenge = $this->prophesize(AuthorizationChallenge::class);
 
-        $solver = new SimpleDnsSolver($mockExtractor->reveal(), $mockOutput->reveal());
+        $validator = new DnsValidator($mockExtractor->reveal(), $mockResolver->reveal());
 
         $mockExtractor->getRecordName($stubChallenge->reveal())->willReturn($recordName);
         $mockExtractor->getRecordValue($stubChallenge->reveal())->willReturn($recordValue);
 
-        $mockOutput->writeln(Argument::any())->shouldBeCalled();
-
-        $solver->cleanup($stubChallenge->reveal());
+        $this->assertFalse($validator->isValid($stubChallenge->reveal(), $this->prophesize(SolverInterface::class)->reveal()));
     }
 }

@@ -40,7 +40,10 @@
     },
     "autoload": {
         "psr-4": {
-            "AcmePhp\\Core\\": "."
+            "AcmePhp\\Core\\": ".",
+            "exclude-from-classmap": [
+                "/Tests/"
+            ]
         }
     },
     "config": {

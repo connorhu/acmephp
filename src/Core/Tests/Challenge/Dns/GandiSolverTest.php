@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\AcmePhp\Core\Challenge\Dns;
+namespace AcmePhp\Core\Tests\Challenge\Dns;
 
 use AcmePhp\Core\Challenge\Dns\DnsDataExtractor;
 use AcmePhp\Core\Challenge\Dns\GandiSolver;

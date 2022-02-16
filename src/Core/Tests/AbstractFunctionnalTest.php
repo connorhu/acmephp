@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\AcmePhp\Core;
+namespace AcmePhp\Core\Tests;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;

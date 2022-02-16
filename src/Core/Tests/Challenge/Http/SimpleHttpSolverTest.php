@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\AcmePhp\Core\Challenge\Http;
+namespace AcmePhp\Core\Tests\Challenge\Http;
 
 use AcmePhp\Core\Challenge\Http\HttpDataExtractor;
 use AcmePhp\Core\Challenge\Http\SimpleHttpSolver;

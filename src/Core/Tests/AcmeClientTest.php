@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\AcmePhp\Core;
+namespace AcmePhp\Core\Tests;
 
 use AcmePhp\Core\AcmeClient;
 use AcmePhp\Core\Challenge\Http\SimpleHttpSolver;
