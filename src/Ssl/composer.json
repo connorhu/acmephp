@@ -29,7 +29,10 @@
     "autoload": {
         "psr-4": {
             "AcmePhp\\Ssl\\": "."
-        }
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
     },
     "require": {
         "php": ">=7.2.5",

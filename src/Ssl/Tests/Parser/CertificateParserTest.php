@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\AcmePhp\Ssl\Parser;
+namespace AcmePhp\Ssl\Tests\Parser;
 
 use AcmePhp\Ssl\Certificate;
 use AcmePhp\Ssl\ParsedCertificate;

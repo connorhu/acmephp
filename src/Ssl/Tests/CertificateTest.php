@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\AcmePhp\Ssl;
+namespace AcmePhp\Ssl\Tests;
 
 use AcmePhp\Ssl\Certificate;
 use AcmePhp\Ssl\PublicKey;

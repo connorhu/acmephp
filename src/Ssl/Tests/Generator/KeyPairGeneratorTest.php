@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\AcmePhp\Ssl\Generator;
+namespace AcmePhp\Ssl\Tests\Generator;
 
 use AcmePhp\Ssl\Generator\DhKey\DhKeyOption;
 use AcmePhp\Ssl\Generator\DsaKey\DsaKeyOption;

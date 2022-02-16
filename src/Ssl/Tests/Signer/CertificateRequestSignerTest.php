@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\AcmePhp\Ssl\Signer;
+namespace AcmePhp\Ssl\Tests\Signer;
 
 use AcmePhp\Ssl\CertificateRequest;
 use AcmePhp\Ssl\DistinguishedName;
