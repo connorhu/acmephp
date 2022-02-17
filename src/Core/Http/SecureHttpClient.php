@@ -20,13 +20,15 @@ use AcmePhp\Core\Util\JsonDecoder;
 use AcmePhp\Ssl\KeyPair;
 use AcmePhp\Ssl\Parser\KeyParser;
 use AcmePhp\Ssl\Signer\DataSigner;
-use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Header;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Utils;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Client\ClientInterface;
 
 /**
  * Guzzle HTTP client wrapper to send requests signed with the account KeyPair.
@@ -43,7 +45,7 @@ class SecureHttpClient
     /**
      * @var ClientInterface
      */
-    private $httpClient;
+    private $psrHttpClient;
 
     /**
      * @var Base64SafeEncoder
@@ -75,16 +77,23 @@ class SecureHttpClient
      */
     private $nonceEndpoint;
 
+    /**
+     * @var RequestFactoryInterface
+     */
+    private $requestFactory;
+
     public function __construct(
         KeyPair $accountKeyPair,
         ClientInterface $httpClient,
+        RequestFactoryInterface $requestFactory,
         Base64SafeEncoder $base64Encoder,
         KeyParser $keyParser,
         DataSigner $dataSigner,
         ServerErrorHandler $errorHandler
     ) {
         $this->accountKeyPair = $accountKeyPair;
-        $this->httpClient = $httpClient;
+        $this->psrHttpClient = $httpClient;
+        $this->requestFactory = $requestFactory;
         $this->base64Encoder = $base64Encoder;
         $this->keyParser = $keyParser;
         $this->dataSigner = $dataSigner;
@@ -227,7 +236,7 @@ class SecureHttpClient
         $call = function () use ($method, $endpoint, $data) {
             $request = $this->createRequest($method, $endpoint, $data);
             try {
-                $this->lastResponse = $this->httpClient->send($request);
+                $this->lastResponse = $this->psrHttpClient->sendRequest($request);
             } catch (\Exception $exception) {
                 $this->handleClientException($request, $exception);
             }
@@ -324,9 +333,15 @@ class SecureHttpClient
         ];
     }
 
-    private function createRequest($method, $endpoint, $data)
+    /**
+     * @param string $method
+     * @param string $endpoint
+     * @param mixed $data
+     * @return RequestInterface
+     */
+    private function createRequest(string $method, string $endpoint, $data): RequestInterface
     {
-        $request = new Request($method, $endpoint);
+        $request = $this->requestFactory->createRequest($method, $endpoint);
         $request = $request->withHeader('Accept', 'application/json,application/jose+json,');
 
         if ('POST' === $method && \is_array($data)) {
@@ -339,6 +354,8 @@ class SecureHttpClient
 
     private function handleClientException(Request $request, \Exception $exception)
     {
+        throw new \Exception('unimplemented');
+
         if ($exception instanceof RequestException && $exception->getResponse() instanceof ResponseInterface) {
             $this->lastResponse = $exception->getResponse();
 
