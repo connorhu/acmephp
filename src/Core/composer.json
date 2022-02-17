@@ -1,5 +1,5 @@
 {
-    "name": "acmephp/core",
+    "name": "acmephpnext/core",
     "description": "Raw implementation of the ACME protocol in PHP",
     "type": "library",
     "license": "MIT",
@@ -31,7 +31,7 @@
         "ext-hash": "*",
         "ext-json": "*",
         "ext-openssl": "*",
-        "acmephp/ssl": "^2.0",
+        "acmephpnext/ssl": "dev-master",
         "guzzlehttp/guzzle": "^6.0|^7.0",
         "guzzlehttp/psr7": "^1.0",
         "lcobucci/jwt": "^3.3|^4.0",
