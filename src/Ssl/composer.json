@@ -35,7 +35,7 @@
         ]
     },
     "require": {
-        "php": ">=7.2.5|>=8.0",
+        "php": ">=7.4.0|>=8.0",
         "ext-hash": "*",
         "ext-openssl": "*",
         "lib-openssl": ">=0.9.8"
