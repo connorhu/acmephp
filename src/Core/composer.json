@@ -46,11 +46,11 @@
     },
     "autoload": {
         "psr-4": {
-            "AcmePhp\\Core\\": ".",
-            "exclude-from-classmap": [
-                "/Tests/"
-            ]
-        }
+            "AcmePhp\\Core\\": "."
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
     },
     "config": {
         "sort-packages": true
