@@ -29,6 +29,7 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * Guzzle HTTP client wrapper to send requests signed with the account KeyPair.
@@ -82,10 +83,16 @@ class SecureHttpClient
      */
     private $requestFactory;
 
+    /**
+     * @var StreamFactoryInterface
+     */
+    private $streamFactory;
+
     public function __construct(
         KeyPair $accountKeyPair,
         ClientInterface $httpClient,
         RequestFactoryInterface $requestFactory,
+        StreamFactoryInterface $streamFactory,
         Base64SafeEncoder $base64Encoder,
         KeyParser $keyParser,
         DataSigner $dataSigner,
@@ -94,6 +101,7 @@ class SecureHttpClient
         $this->accountKeyPair = $accountKeyPair;
         $this->psrHttpClient = $httpClient;
         $this->requestFactory = $requestFactory;
+        $this->streamFactory = $streamFactory;
         $this->base64Encoder = $base64Encoder;
         $this->keyParser = $keyParser;
         $this->dataSigner = $dataSigner;
@@ -346,7 +354,7 @@ class SecureHttpClient
 
         if ('POST' === $method && \is_array($data)) {
             $request = $request->withHeader('Content-Type', 'application/jose+json');
-            $request = $request->withBody(Utils::streamFor(json_encode($data)));
+            $request = $request->withBody($this->streamFactory->createStream(json_encode($data)));
         }
 
         return $request;

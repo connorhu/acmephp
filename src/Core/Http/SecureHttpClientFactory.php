@@ -16,6 +16,7 @@ use AcmePhp\Ssl\Parser\KeyParser;
 use AcmePhp\Ssl\Signer\DataSigner;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * Guzzle HTTP client wrapper to send requests signed with the account KeyPair.
@@ -33,6 +34,11 @@ class SecureHttpClientFactory
      * @var RequestFactoryInterface
      */
     private $requestFactory;
+
+    /**
+     * @var StreamFactoryInterface
+     */
+    private $streamFactory;
 
     /**
      * @var Base64SafeEncoder
@@ -57,6 +63,7 @@ class SecureHttpClientFactory
     public function __construct(
         ClientInterface $httpClient,
         RequestFactoryInterface $requestFactory,
+        StreamFactoryInterface $streamFactory,
         Base64SafeEncoder $base64Encoder,
         KeyParser $keyParser,
         DataSigner $dataSigner,
@@ -64,6 +71,7 @@ class SecureHttpClientFactory
     ) {
         $this->httpClient = $httpClient;
         $this->requestFactory = $requestFactory;
+        $this->streamFactory = $streamFactory;
         $this->base64Encoder = $base64Encoder;
         $this->keyParser = $keyParser;
         $this->dataSigner = $dataSigner;
@@ -79,6 +87,7 @@ class SecureHttpClientFactory
             $accountKeyPair,
             $this->httpClient,
             $this->requestFactory,
+            $this->streamFactory,
             $this->base64Encoder,
             $this->keyParser,
             $this->dataSigner,
