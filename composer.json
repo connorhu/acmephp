@@ -78,12 +78,17 @@
     },
     "autoload": {
         "psr-4": {
-            "AcmePhp\\Core\\": "src/Core",
-            "AcmePhp\\Ssl\\": "src/Ssl"
+            "AcmePhp\\Cli\\": "src/Cli"
         },
         "exclude-from-classmap": [
             "**/Tests/"
         ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AcmePhp\\Core\\": "src/Core",
+            "AcmePhp\\Ssl\\": "src/Ssl"
+        }
     },
     "config": {
         "sort-packages": true,
