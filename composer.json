@@ -86,7 +86,7 @@
     "config": {
         "sort-packages": true,
         "platform": {
-            "php": "7.2.34"
+            "php": "8.0.2"
         }
     },
     "repositories": [
