@@ -41,6 +41,8 @@
         "ext-mbstring": "*",
         "ext-openssl": "*",
         "lib-openssl": ">=0.9.8",
+        "acmephpnext/core": "dev-master",
+        "acmephpnext/ssl": "dev-master",
         "alibabacloud/cdn": "^1.7",
         "alibabacloud/wafopenapi": "^1.7",
         "aws/aws-sdk-php": "^3.38",
@@ -86,5 +88,15 @@
         "platform": {
             "php": "7.2.34"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "src/Core"
+        },
+        {
+            "type": "path",
+            "url": "src/Ssl"
+        }
+    ]
 }
