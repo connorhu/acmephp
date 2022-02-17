@@ -108,7 +108,7 @@ interface AcmeClientInterface
      * @throws AcmeCoreClientException        when an error occured during response parsing
      * @throws ChallengeNotSupportedException when the HTTP challenge is not supported by the server
      *
-     * @return AuthorizationChallenge[] the list of challenges data returned by the Certificate Authority
+     * @return array<AuthorizationChallenge> the list of challenges data returned by the Certificate Authority
      */
     public function requestAuthorization(string $domain): array;
 
