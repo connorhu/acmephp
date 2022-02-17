@@ -22,8 +22,6 @@ use AcmePhp\Ssl\Parser\KeyParser;
 use AcmePhp\Ssl\Signer\DataSigner;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Header;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Utils;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
@@ -213,7 +211,7 @@ class SecureHttpClient
     public function request(string $method, string $endpoint, array $data = [], bool $returnJson = true)
     {
         $response = $this->rawRequest($method, $endpoint, $data);
-        $body = Utils::copyToString($response->getBody());
+        $body = $response->getBody()->getContents();
 
         if (!$returnJson) {
             return $body;

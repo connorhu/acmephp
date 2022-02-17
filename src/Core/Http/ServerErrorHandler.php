@@ -80,7 +80,7 @@ class ServerErrorHandler
             return RequestException::getResponseBodySummary($response);
         }
 
-        $body = \GuzzleHttp\Psr7\copy_to_string($response->getBody());
+        $body = $response->getBody()->getContents();
 
         if (\strlen($body) > 120) {
             return substr($body, 0, 120).' (truncated...)';
@@ -94,7 +94,7 @@ class ServerErrorHandler
         ResponseInterface $response,
         \Exception $previous = null
     ): AcmeCoreServerException {
-        $body = \GuzzleHttp\Psr7\copy_to_string($response->getBody());
+        $body = $response->getBody()->getContents();
 
         try {
             $data = JsonDecoder::decode($body, true);
